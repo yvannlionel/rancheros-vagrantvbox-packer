@@ -1,0 +1,71 @@
+{
+  "variables": {
+    "vm_version": "",
+    "iso_md5_checksum": "",
+    "vm_description": ""
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Linux26_64",
+      "iso_url": "https://github.com/rancherio/os/releases/download/v{{user `vm_version`}}/rancheros.iso",
+      "iso_checksum": "{{user `iso_md5_checksum`}}",
+      "iso_checksum_type": "md5",
+      "guest_additions_mode": "disable",
+      "ssh_private_key_file": "./keys/vagrant",
+      "ssh_username": "rancher",
+      "ssh_wait_timeout": "240s",
+      "hard_drive_interface": "sata",
+      "hard_drive_nonrotational": true,
+      "iso_interface": "sata",
+      "vm_name": "rancherOS",
+      "disk_size": "24000",
+      "boot_wait": "45s",
+      "boot_command": [
+        "echo \"#cloud-config\" >> cloud-config.yml<enter>",
+        "echo \"ssh_authorized_keys:\" >> cloud-config.yml<enter>",
+        "echo \"  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key\" >> cloud-config.yml<enter>",
+        "echo \"rancher:\" >> cloud-config.yml<enter>",
+        "echo \"  console: alpine\" >> cloud-config.yml<enter>",
+        "echo \"runcmd:\" >> cloud-config.yml<enter>",
+        "echo \"  - apk add -U shadow coreutils python\" >> cloud-config.yml<enter>",
+        "echo \"  - usermod --shell /bin/bash root\" >> cloud-config.yml<enter>",
+        "sudo ros install -c cloud-config.yml -d /dev/sda<enter>",
+        "y<enter>",
+        "<wait5>",
+        "y<enter>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10><wait10>"
+      ],
+      "shutdown_command": "sudo shutdown -P now",
+      "export_opts": [
+        "--manifest",
+        "--vsys", "0",
+        "--description", "{{user `vm_description`}}",
+        "--version", "{{user `vm_version`}}"
+      ],
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "1280" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "1" ]
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "compression_level": 9,
+        "keep_input_artifact": false,
+        "output":"RancherOS_{{user `vm_version`}}.box",
+        "vagrantfile_template": "./Vagrantfile",
+        "include": "./vagrant_rancheros_guest_plugin.rb"
+      },
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "{{user `vagrantcloud_box_name`}}",
+        "access_token": "{{user `vagrantcloud_token`}}",
+        "version": "{{user `vm_version`}}",
+        "version_description": "{{user `vm_description`}}"
+      }
+    ]
+  ]
+}

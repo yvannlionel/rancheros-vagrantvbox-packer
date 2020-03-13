@@ -1,0 +1,3 @@
+vm_description="with Alpine console and python (without VirtualBox Guest Additions)."
+vagrantcloud_box_name="walidsaad/RancherOS"
+vagrantcloud_token="CHiP79OTrShzRg.atlasv1.tLchjmcNbWsWe3iSbo1vDr1mpGwfStTzHvf2abWZFb5P3TcTwawIOh97JRG6iLUJ6Kc"
