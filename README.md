@@ -96,4 +96,88 @@ versions:   1.5.5
 
 ```
 
+### Test the Box from the Vagrant Cloud
 
+```shell
+-Create the Vagrantfile
+cat Vagrantfile 
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+	config.vm.box = "walidsaad/RancherOS_1.5.5"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provider "virtualbox" do |vb|
+      vb.check_guest_additions = false
+      # If the host has a functional vboxsf filesystem
+      vb.functional_vboxsf = false
+      # Customize the amount of memory on the VM:
+      vb.memory = "1280"
+  end
+
+  # SSH Configuration
+  config.ssh.username = "rancher"
+  config.ssh.keys_only = true
+
+  # Stop vagrant-vbguest installing Guest Additions
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = true
+  end
+end
+
+
+-Create VirtualBox VM
+vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Importing base box 'walidsaad/RancherOS_1.5.5'...
+==> default: Matching MAC address for NAT networking...
+==> default: Setting the name of the VM: test-rancheros-vagrant_default_1584093624696_84993
+==> default: Vagrant has detected a configuration issue which exposes a
+==> default: vulnerability with the installed version of VirtualBox. The
+==> default: current guest is configured to use an E1000 NIC type for a
+==> default: network adapter which is vulnerable in this version of VirtualBox.
+==> default: Ensure the guest is trusted to use this configuration or update
+==> default: the NIC type using one of the methods below:
+==> default: 
+==> default:   https://www.vagrantup.com/docs/virtualbox/configuration.html#default-nic-type
+==> default:   https://www.vagrantup.com/docs/virtualbox/networking.html#virtualbox-nic-type
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 22 (guest) => 2222 (host) (adapter 1)
+==> default: Running 'pre-boot' VM customizations...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: rancher
+    default: SSH auth method: private key
+    default: Warning: Remote connection disconnect. Retrying...
+    default: Warning: Connection reset. Retrying...
+    default: Warning: Remote connection disconnect. Retrying...
+    default: Warning: Connection reset. Retrying...
+    default: 
+    default: Vagrant insecure key detected. Vagrant will automatically replace
+    default: this with a newly generated keypair for better security.
+    default: 
+    default: Inserting generated public key within guest...
+    default: Removing insecure key from the guest if it's present...
+    default: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> default: Machine booted and ready!
+
+
+-ssh to VM
+vagrant ssh
+Welcome to Alpine!
+
+The Alpine Wiki contains a large amount of how-to guides and general
+information about administrating Alpine systems.
+See <http://wiki.alpinelinux.org/>.
+
+You can setup the system with the command: setup-alpine
+
+You may change this message by editing /etc/motd.
+
+rancher:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+rancher:~$
