@@ -76,7 +76,7 @@ You are now logged in.
 ### Publish the Box to the Vagrant Cloud
 
 ```shell
- vagrant cloud  publish  walidsaad/RancherOS_1.5.5 1.5.5 virtualbox RancherOS_1.5.5.box
+ vagrant cloud  publish  walidsaad/RancherOS_1.5.5 1.5.5 virtualbox --release RancherOS_1.5.5.box
 You are about to publish a box on Vagrant Cloud with the following options:
 walidsaad/RancherOS_1.5.5:   (v1.5.5) for provider 'virtualbox'
 Do you wish to continue? [y/N] y
