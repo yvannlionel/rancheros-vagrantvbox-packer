@@ -55,10 +55,11 @@ RancherOS_1.5.5-local     (virtualbox, 0)
  vagrant init RancherOS_1.3.0-local
  vagrant up
 ```
-### Publish the Box to the Vagrant Cloud
+
+### Login to the Vagrant Cloud
 
 ```shell
- vagrant login
+vagrant login
 In a moment we will ask for your username and password to HashiCorp's
 Vagrant Cloud. After authenticating, we will store an access token locally on
 disk. Your login details will be transmitted over a secure connection, and
@@ -71,7 +72,10 @@ Vagrant Cloud username or email: walidsaad
 Password (will be hidden): 
 Token description (Defaults to "Vagrant login from walidos"): "set your token here"
 You are now logged in.
+```
+### Publish the Box to the Vagrant Cloud
 
+```shell
  vagrant cloud  publish  walidsaad/RancherOS_1.5.5 1.5.5 virtualbox RancherOS_1.5.5.box
 You are about to publish a box on Vagrant Cloud with the following options:
 walidsaad/RancherOS_1.5.5:   (v1.5.5) for provider 'virtualbox'
@@ -91,3 +95,5 @@ updated_at: 2020-03-13T00:57:59.234Z
 versions:   1.5.5
 
 ```
+
+
