@@ -12,7 +12,7 @@ fi
 
 source "RancherOS-${1}"
 
-packer build \
+../packer build \
     -var "vm_version=${vm_version}" \
     -var "iso_md5_checksum=${iso_md5_checksum}" \
     -var "vm_description=RancherOS ${vm_version} ${vm_description}" \
